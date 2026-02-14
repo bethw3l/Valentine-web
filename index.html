@@ -8,18 +8,17 @@
 
 body{
 text-align:center;
-font-family:Arial;
 background:deeppink;
 color:white;
 overflow-x:hidden;
+margin:0;
 }
 
-/* Floating hearts */
+/* Floating Hearts */
 .heart{
 position:fixed;
 bottom:-10px;
-font-size:20px;
-animation:float 6s linear infinite;
+animation:float 5s linear infinite;
 }
 
 @keyframes float{
@@ -27,10 +26,11 @@ animation:float 6s linear infinite;
 100%{transform:translateY(-100vh);}
 }
 
-/* Center container */
+/* Pages */
 .page{
 display:none;
 margin-top:80px;
+padding:20px;
 }
 
 .active{
@@ -47,17 +47,14 @@ margin:10px;
 cursor:pointer;
 }
 
-.yes{
-background:white;
-color:deeppink;
-}
-
-.music-controls{
+/* Music controls */
+.music{
 position:fixed;
 top:10px;
 right:10px;
 }
 
+/* Footer */
 footer{
 position:fixed;
 bottom:5px;
@@ -75,15 +72,14 @@ font-size:12px;
 <source src="perfect.mp3" type="audio/mp3">
 </audio>
 
-<div class="music-controls">
-<button onclick="playMusic()">▶</button>
-<button onclick="pauseMusic()">⏸</button>
+<div class="music">
+<button onclick="music.play()">▶</button>
+<button onclick="music.pause()">⏸</button>
 </div>
 
-<!-- COUNTDOWN -->
 <h2 id="countdown"></h2>
 
-<!-- PAGE 1 GENDER -->
+<!-- PAGE 1 -->
 <div class="page active" id="page1">
 <h1>Select Gender</h1>
 <button onclick="female()">Female</button>
@@ -92,46 +88,43 @@ font-size:12px;
 
 <!-- FLIRT PAGES -->
 <div class="page" id="page2">
-<h1>You look amazing today 😍</h1>
-<button onclick="next(3)">Next</button>
+<h1>You look beautiful today 😍</h1>
+<button onclick="show(3)">Next</button>
 </div>
 
 <div class="page" id="page3">
-<h1>I hope you know you are special 💕</h1>
-<button onclick="next(4)">Next</button>
+<h1>You make life brighter 💕</h1>
+<button onclick="show(4)">Next</button>
 </div>
 
 <div class="page" id="page4">
-<h1>You brighten every moment ✨</h1>
-<button onclick="next(5)">Next</button>
+<h1>I love your smile ✨</h1>
+<button onclick="show(5)">Next</button>
 </div>
 
 <div class="page" id="page5">
-<h1>I have something important to ask...</h1>
-<button onclick="next(6)">Continue</button>
+<h1>I enjoy every moment with you ❤️</h1>
+<button onclick="show(6)">Next</button>
 </div>
 
-<!-- VALENTINE QUESTION -->
 <div class="page" id="page6">
-<h1>Will you be my Valentine? ❤️</h1>
-<button class="yes" onclick="accepted()">YES</button>
-<button class="yes" onclick="accepted()">YES</button>
+<h1>Will you be my Valentine?</h1>
+<button onclick="accepted()">YES</button>
+<button onclick="accepted()">YES</button>
 </div>
 
-<!-- FORM PAGE -->
+<!-- FORM -->
 <div class="page" id="page7">
-
-<h2>Enter your phone number</h2>
-<input id="phone" placeholder="Phone number"><br><br>
+<h2>Enter Phone Number</h2>
+<input id="phone"><br><br>
 
 <h2>What time are you available on Feb 14?</h2>
-<input id="time" type="time"><br><br>
+<input type="time" id="time"><br><br>
 
 <button onclick="finish()">Submit</button>
-
 </div>
 
-<!-- RESULT PAGE -->
+<!-- RESULT -->
 <div class="page" id="page8">
 
 <h1>I HAVE ACCEPTED TO BE YOUR VALENTINE ❤️</h1>
@@ -139,75 +132,75 @@ font-size:12px;
 <p id="outfit"></p>
 <p id="place"></p>
 
-<!-- Compliment Generator -->
 <button onclick="compliment()">Give me a compliment</button>
 <p id="complimentText"></p>
 
-<!-- Map -->
-<iframe id="map" width="300" height="200"></iframe>
+<iframe id="map" width="300" height="200"></iframe><br><br>
 
-<!-- Calendar -->
-<button onclick="calendar()">Add to Calendar</button>
+<button onclick="calendar()">Add To Calendar</button>
 
 </div>
 
 <script>
 
 /* Navigation */
-function next(p){
-show(p);
-}
-
 function show(p){
 document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
 document.getElementById("page"+p).classList.add("active");
 }
 
-/* Gender */
+/* Female */
 function female(){
 show(2);
+music.play();
 }
 
+/* Male Exit Animation */
 function male(){
-alert("bye bye my nigga");
+
+document.body.innerHTML="<h1 id='byeText'></h1>";
+
+let words=["Bye","Bye","👋","👋"];
+
+let i=0;
+
+let interval=setInterval(()=>{
+if(i<words.length){
+document.getElementById("byeText").innerHTML+=words[i]+" ";
+createByeBubble();
+i++;
+}else{
+clearInterval(interval);
+}
+},1000);
 }
 
-/* Music */
-let music=document.getElementById("music");
+/* Bye Bubble */
+function createByeBubble(){
+let bubble=document.createElement("div");
+bubble.innerHTML="👋";
+bubble.className="heart";
+bubble.style.left=Math.random()*100+"vw";
+bubble.style.fontSize=(20+Math.random()*40)+"px";
+document.body.appendChild(bubble);
+setTimeout(()=>bubble.remove(),4000);
+}
 
-function playMusic(){ music.play(); }
-function pauseMusic(){ music.pause(); }
-
-/* Accepted */
+/* YES Celebration */
 function accepted(){
 show(7);
-}
 
-/* Floating hearts */
-setInterval(()=>{
+for(let i=0;i<40;i++){
+setTimeout(()=>{
 let heart=document.createElement("div");
 heart.innerHTML="❤️";
 heart.className="heart";
 heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(20+Math.random()*30)+"px";
+heart.style.fontSize=(20+Math.random()*40)+"px";
 document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),6000);
-
-},500);
-
-/* Compliments */
-let compliments=[
-"You are unbelievably beautiful",
-"You make my heart calm",
-"You are my favorite notification",
-"Your smile is magical",
-"You make life better"
-];
-
-function compliment(){
-let c=compliments[Math.floor(Math.random()*compliments.length)];
-document.getElementById("complimentText").innerText=c;
+setTimeout(()=>heart.remove(),4000);
+},i*100);
+}
 }
 
 /* Finish */
@@ -215,9 +208,9 @@ function finish(){
 
 let outfits=[
 "Wear a red dress ❤️",
+"Wear a pink outfit 💕",
 "Wear something classy and elegant",
-"Wear pink outfit 💕",
-"Wear something you feel confident in"
+"Wear something comfortable and beautiful"
 ];
 
 let places=[
@@ -234,14 +227,27 @@ let time=document.getElementById("time").value;
 document.getElementById("outfit").innerText="Outfit: "+outfit;
 document.getElementById("place").innerText="Meetup: "+place+" at "+time;
 
-/* Map */
 document.getElementById("map").src=
 "https://www.google.com/maps?q="+place+"&output=embed";
 
 show(8);
 }
 
-/* Countdown to Feb 14 */
+/* Compliments */
+let compliments=[
+"You are stunning",
+"You make my heart peaceful",
+"You are my favorite person",
+"Your smile is magical",
+"You make everything better"
+];
+
+function compliment(){
+let c=compliments[Math.floor(Math.random()*compliments.length)];
+document.getElementById("complimentText").innerText=c;
+}
+
+/* Countdown */
 let target=new Date("Feb 14, 2026 00:00:00").getTime();
 
 setInterval(()=>{
@@ -262,7 +268,7 @@ document.getElementById("countdown").innerHTML=
 function calendar(){
 let date="20260214T120000";
 window.open(
-"https://calendar.google.com/calendar/render?action=TEMPLATE&text=Valentine Meetup&dates="+date+"/"+date+"&details=Valentine Date"
+"https://calendar.google.com/calendar/render?action=TEMPLATE&text=Valentine Date&dates="+date+"/"+date+"&details=Valentine Meetup"
 );
 }
 

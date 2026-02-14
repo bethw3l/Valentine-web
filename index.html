@@ -113,10 +113,16 @@ button{
     </div>
 </div>
 
-<!-- Background Music -->
-<audio autoplay loop>
-    <source src="perfect.mp3" type="audio/mp3">
+<!-- Background music -->
+<audio id="music" loop>
+  <source src="perfect.mp3" type="audio/mp3">
 </audio>
+
+<script>
+document.addEventListener("click", function(){
+  document.getElementById("music").play();
+});
+</script>
 
 <h1>💖 For Someone Very Special 💖</h1>
 
@@ -225,4 +231,5 @@ setInterval(()=>{
 
 </body>
 </html>
+
 

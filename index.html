@@ -7,11 +7,11 @@
 <style>
 body{
     font-family: Arial, sans-serif;
-    background: linear-gradient(120deg,#ff9a9e,#fad0c4);
     text-align:center;
     padding:40px;
     color:white;
     overflow:hidden;
+    transition: background 2s;
 }
 
 button{
@@ -23,7 +23,7 @@ button{
     cursor:pointer;
     position:absolute;
     color:white;
-    transition:2.0s;
+    transition:0.5s;
 }
 
 #output{
@@ -35,12 +35,7 @@ button{
 .heart{
     position:absolute;
     font-size:20px;
-    animation:float 5s linear infinite;
-}
-
-@keyframes float{
-    0%{ transform:translateY(0); opacity:1; }
-    100%{ transform:translateY(-800px); opacity:0; }
+    transition: 2.5s linear;
 }
 </style>
 </head>
@@ -65,7 +60,7 @@ button{
 
 <script>
 
-// FAKE SCANNER
+// ---- FAKE SCANNER ----
 function scan(){
     document.getElementById("output").innerHTML = "Scanning personality... 🧐";
     setTimeout(()=>{
@@ -74,7 +69,7 @@ function scan(){
     },2000);
 }
 
-// RANDOM FUNNY MESSAGES
+// ---- RANDOM FUNNY MESSAGES ----
 function joke(){
     let jokes = [
         "Scientific discovery: Your smile improves global happiness 😂",
@@ -86,21 +81,17 @@ function joke(){
     document.getElementById("output").innerHTML = random;
 }
 
-// FINAL SURPRISE
+// ---- FINAL SURPRISE ----
 function final(){
     document.getElementById("output").innerHTML =
     "Final result... I made this whole thing just to make you smile 😊";
-    confetti({
-        particleCount:200,
-        spread:90,
-        origin:{y:0.6}
-    });
+    confetti({ particleCount:200, spread:90, origin:{y:0.6} });
 }
 
-// FLOATING BUTTONS
+// ---- FLOATING BUTTONS ----
 let floatBtns = document.querySelectorAll(".floatBtn");
 
-// Float and change colors every 0.5s
+// Float + change color every 0.5s
 setInterval(()=>{
     floatBtns.forEach(btn=>{
         moveButton(btn);
@@ -118,7 +109,7 @@ function changeColor(btn){
     btn.style.background = "hsl(" + hue + ", 80%, 60%)";
 }
 
-// BUTTON DODGE FINGER (TOUCH)
+// ---- BUTTON DODGE FINGER (TOUCH) ----
 document.addEventListener("touchmove", e=>{
     let touch = e.touches[0];
     floatBtns.forEach(btn=>{
@@ -129,7 +120,7 @@ document.addEventListener("touchmove", e=>{
     });
 });
 
-// FLOATING HEARTS
+// ---- FLOATING HEARTS ----
 function createHeart(){
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -137,13 +128,25 @@ function createHeart(){
     heart.style.left = Math.random()*100 + "vw";
     heart.style.bottom = "-20px";
     document.body.appendChild(heart);
-    setTimeout(()=>{ heart.remove(); },5000);
+
+    // Move heart randomly every 2.5s
+    setInterval(()=>{
+        heart.style.left = Math.random()*100 + "vw";
+        heart.style.bottom = Math.random()*80 + "vh";
+    },2500);
+
+    setTimeout(()=>{ heart.remove(); },8000);
 }
 setInterval(createHeart,400);
+
+// ---- BACKGROUND COLOR CHANGE ----
+function randomBackground(){
+    let hue = Math.floor(Math.random()*360);
+    document.body.style.background = "linear-gradient(120deg, hsl(" + hue + ", 80%, 70%), hsl(" + ((hue+60)%360) + ", 80%, 80%))";
+}
+setInterval(randomBackground,5000);
 
 </script>
 
 </body>
 </html>
-
-

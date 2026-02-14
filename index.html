@@ -2,30 +2,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Valentine ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise ❤️</title>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
+
 body{
 background:deeppink;
 color:white;
 font-family:Verdana;
 text-align:center;
+margin:0;
 }
 
 .page{display:none;padding:20px;}
 .active{display:block;}
 
 button{
-padding:12px 25px;
+padding:12px 20px;
 font-size:18px;
 border:none;
 border-radius:12px;
 margin:10px;
-cursor:pointer;
 background:white;
 color:deeppink;
+cursor:pointer;
+}
+
+select,input{
+padding:10px;
+border-radius:10px;
+border:none;
+margin:10px;
 }
 
 footer{
@@ -34,14 +44,50 @@ bottom:5px;
 width:100%;
 font-size:12px;
 }
+
+/* Hearts Animation */
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:float 6s linear infinite;
+}
+@keyframes float{
+100%{transform:translateY(-100vh);}
+}
+
+/* Fireworks */
+.firework{
+position:fixed;
+font-size:30px;
+animation:boom 1s forwards;
+}
+@keyframes boom{
+100%{transform:scale(3);opacity:0;}
+}
+
+img{
+max-width:90%;
+border-radius:15px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>Select Gender</h2>
+<!-- MUSIC -->
+<audio id="music" loop>
+<source src="beta.mp3">
+</audio>
 
-<div class="page active" id="genderPage">
+<button onclick="music.play()">Play Music 🎵</button>
+
+<h2 id="countdown"></h2>
+
+<!-- GENDER -->
+<div class="page active" id="gender">
+<h2>Select Gender</h2>
 <button onclick="female()">Female</button>
 <button onclick="male()">Male</button>
 </div>
@@ -50,71 +96,101 @@ font-size:12px;
 <h2>Thanks for visiting 💙</h2>
 </div>
 
+<!-- FLIRT PAGES -->
 <div class="page" id="p1">
-<h2>You have a beautiful smile 😍</h2>
+<h2>You have the most beautiful smile 😍</h2>
 <button onclick="show('p2')">Next</button>
 </div>
 
 <div class="page" id="p2">
-<h2>You make my world brighter 💕</h2>
+<h2>You light up my world 💕</h2>
 <button onclick="show('p3')">Next</button>
 </div>
 
 <div class="page" id="p3">
-<h2>I enjoy every moment with you ✨</h2>
+<h2>Every moment with you feels special ✨</h2>
 <button onclick="show('p4')">Next</button>
 </div>
 
 <div class="page" id="p4">
 <h2>Will you be my Valentine ❤️</h2>
-<button onclick="show('formPage')">YES</button>
-<button onclick="show('formPage')">YES</button>
+<button onclick="yes()">YES</button>
+<button onclick="yes()">YES</button>
 </div>
 
+<!-- FORM -->
 <div class="page" id="formPage">
 
 <h3>Country Code</h3>
 <select id="country">
 <option value="254">Kenya (+254)</option>
 <option value="1">USA (+1)</option>
+<option value="255">Tanzania (+255)</option>
+<option value="256">Uganda (+256)</option>
 </select>
 
 <h3>Phone Number</h3>
-<input id="phone"><br><br>
+<input id="phone">
 
-<h3>University</h3>
+<h3>Select University</h3>
 <select id="university">
-<option>Zetech University</option>
 <option>University of Nairobi</option>
+<option>Moi University</option>
 <option>Kenyatta University</option>
+<option>Egerton University</option>
+<option>Maseno University</option>
+<option>JKUAT</option>
+<option>Technical University of Kenya</option>
+<option>Zetech University</option>
 <option>Strathmore University</option>
+<option>USIU</option>
 <option>Mount Kenya University</option>
+<option>Daystar University</option>
+<option>KCA University</option>
+<option>Kenya Methodist University</option>
 </select>
 
 <h3>Meeting Place</h3>
-<select id="meetPlace">
+<select id="place">
 <option>Main Gate</option>
 <option>Library</option>
 <option>Cafeteria</option>
 <option>Garden</option>
+<option>Parking Area</option>
 </select>
 
 <h3>Meeting Time Feb 14</h3>
-<input id="time" type="time"><br><br>
+<input type="time" id="time">
 
+<br>
 <button onclick="finish()">Submit</button>
 
 </div>
 
-<div class="page" id="resultPage">
+<!-- RESULT -->
+<div class="page" id="result">
+
 <h2>I HAVE ACCEPTED TO BE YOUR VALENTINE ❤️</h2>
+
 <p id="details"></p>
+<p id="outfit"></p>
+
+<button onclick="compliment()">Romantic Compliment 💌</button>
+<p id="complimentText"></p>
+
+<iframe id="map" width="300" height="200"></iframe>
+
+<img id="slide" src="photo1.jpg">
+
+<button onclick="calendar()">Add To Calendar</button>
+
 </div>
 
 <script>
 
 emailjs.init("gUxDJTQCgr53kVpTU");
 
+/* Navigation */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -123,50 +199,118 @@ document.getElementById(id).classList.add("active");
 function female(){show("p1");}
 function male(){show("malePage");}
 
+/* Hearts */
+setInterval(()=>{
+let h=document.createElement("div");
+h.innerHTML="❤️";
+h.className="heart";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},500);
+
+/* Fireworks */
+function fireworks(){
+for(let i=0;i<20;i++){
+let f=document.createElement("div");
+f.innerHTML="🎆";
+f.className="firework";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*100+"vh";
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
+}
+}
+
+function yes(){
+fireworks();
+show("formPage");
+}
+
+/* Countdown */
+let target=new Date("Feb 14, 2026").getTime();
+setInterval(()=>{
+let now=new Date().getTime();
+let diff=target-now;
+
+let d=Math.floor(diff/(1000*60*60*24));
+let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+let m=Math.floor((diff%(1000*60*60))/(1000*60));
+let s=Math.floor((diff%(1000*60))/1000);
+
+countdown.innerHTML=`Countdown: ${d}d ${h}h ${m}m ${s}s`;
+
+},1000);
+
+/* Compliments */
+let compliments=[
+"You are breathtaking ❤️",
+"You make life sweeter 💕",
+"You are unforgettable ✨"
+];
+
+function compliment(){
+complimentText.innerText=
+compliments[Math.floor(Math.random()*compliments.length)];
+}
+
+/* Slideshow */
+let photos=["photo1.jpg","photo2.jpg","photo3.jpg"];
+let i=0;
+setInterval(()=>{
+i=(i+1)%photos.length;
+slide.src=photos[i];
+},3000);
+
+/* Finish */
 function finish(){
 
-let country = document.getElementById("country").value;
-let phone = document.getElementById("phone").value;
-let university = document.getElementById("university").value;
-let meetPlace = document.getElementById("meetPlace").value;
-let time = document.getElementById("time").value;
+let phone=country.value + document.getElementById("phone").value;
+let uni=university.value;
+let place=document.getElementById("place").value;
+let time=document.getElementById("time").value;
 
-if(phone === "" || time === ""){
-alert("Please fill all fields");
+if(time=="" || phone==""){
+alert("Fill all fields");
 return;
 }
 
-let fullPhone = country + phone;
-let meeting = university + " - " + meetPlace + " at " + time;
+let meet=uni+" - "+place+" at "+time;
 
-document.getElementById("details").innerText = meeting;
+details.innerText=meet;
 
+/* Outfit */
+let outfits=["Red dress ❤️","Elegant pink outfit","Romantic evening dress"];
+outfit.innerText="Suggested Outfit: "+outfits[Math.floor(Math.random()*outfits.length)];
 
-// EMAILJS SEND
+/* Map */
+map.src="https://www.google.com/maps?q="+uni+"&output=embed";
+
+/* Email */
 emailjs.send("service_7h95teq","template_541whrq",{
-meeting_details: meeting,
-phone_number: fullPhone
-}).then(function(){
-alert("Email sent successfully ✅");
-}).catch(function(error){
-alert("Email failed ❌");
-console.log(error);
+meeting_details:meet,
+phone_number:phone
 });
 
+/* WhatsApp HER */
+window.open("https://wa.me/"+phone+"?text=Hi ❤️ I accepted Valentine. Meeting at "+meet);
 
-// WHATSAPP TO USER
-window.open(
-"https://wa.me/" + fullPhone +
-"?text=Hi ❤️ I accepted to be your Valentine. Meeting at " + meeting
-);
+/* WhatsApp YOU */
+window.open("https://wa.me/13165168543?text=She accepted ❤️ Meeting at "+meet);
 
+/* Reminder Simulation */
+setTimeout(()=>alert("Reminder 30 minutes left ❤️"),10000);
+setTimeout(()=>alert("Reminder 20 minutes left ❤️"),20000);
+setTimeout(()=>alert("Reminder 10 minutes left ❤️"),30000);
+setTimeout(()=>alert("Reminder 5 minutes left ❤️"),40000);
 
-// WHATSAPP TO YOU
-window.open(
-"https://wa.me/13165168543?text=She accepted Valentine ❤️ Meeting at " + meeting
-);
+show("result");
 
-show("resultPage");
+}
+
+/* Calendar */
+function calendar(){
+window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text=Valentine Date");
 }
 
 </script>

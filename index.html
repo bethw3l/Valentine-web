@@ -1,245 +1,276 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>For Someone Special ❤️</title>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<meta charset="UTF-8">
+<title>Valentine Surprise ❤️</title>
 
 <style>
+
 body{
-  text-align: center;
-  background-color: #FF1493; /* deep pink */
-  padding: 30px;
-  margin:0;
+text-align:center;
+font-family:Arial;
+background:deeppink;
+color:white;
+overflow-x:hidden;
 }
 
-.box{
-  background:white;
-  padding:20px;
-  border-radius:15px;
-  width:360px;
-  margin:auto;
-  box-shadow:0 0 10px gray;
-  margin-bottom:20px;
+/* Floating hearts */
+.heart{
+position:fixed;
+bottom:-10px;
+font-size:20px;
+animation:float 6s linear infinite;
 }
 
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-100vh);}
+}
+
+/* Center container */
+.page{
+display:none;
+margin-top:80px;
+}
+
+.active{
+display:block;
+}
+
+/* Buttons */
 button{
-  padding:10px 20px;
-  margin:10px;
-  cursor:pointer;
-  border:none;
-  background-color:#ff66a3;
-  color:white;
-  border-radius:8px;
-  font-size:16px;
+padding:12px 25px;
+font-size:18px;
+border:none;
+border-radius:12px;
+margin:10px;
+cursor:pointer;
 }
 
-button:hover{
-  background-color:#ff3385;
+.yes{
+background:white;
+color:deeppink;
 }
 
-input{
-  padding:8px;
-  margin:5px;
-  width:80%;
-  font-size:14px;
+.music-controls{
+position:fixed;
+top:10px;
+right:10px;
 }
 
-/* Copyright at bottom */
-#copyright{
-  font-size:14px;
-  color:white;
-  margin-top:20px;
+footer{
+position:fixed;
+bottom:5px;
+width:100%;
+font-size:12px;
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- Background music -->
+<!-- MUSIC -->
 <audio id="music" loop>
-  <source src="perfect.mp3" type="audio/mp3">
+<source src="perfect.mp3" type="audio/mp3">
 </audio>
 
+<div class="music-controls">
+<button onclick="playMusic()">▶</button>
+<button onclick="pauseMusic()">⏸</button>
+</div>
+
+<!-- COUNTDOWN -->
+<h2 id="countdown"></h2>
+
+<!-- PAGE 1 GENDER -->
+<div class="page active" id="page1">
+<h1>Select Gender</h1>
+<button onclick="female()">Female</button>
+<button onclick="male()">Male</button>
+</div>
+
+<!-- FLIRT PAGES -->
+<div class="page" id="page2">
+<h1>You look amazing today 😍</h1>
+<button onclick="next(3)">Next</button>
+</div>
+
+<div class="page" id="page3">
+<h1>I hope you know you are special 💕</h1>
+<button onclick="next(4)">Next</button>
+</div>
+
+<div class="page" id="page4">
+<h1>You brighten every moment ✨</h1>
+<button onclick="next(5)">Next</button>
+</div>
+
+<div class="page" id="page5">
+<h1>I have something important to ask...</h1>
+<button onclick="next(6)">Continue</button>
+</div>
+
+<!-- VALENTINE QUESTION -->
+<div class="page" id="page6">
+<h1>Will you be my Valentine? ❤️</h1>
+<button class="yes" onclick="accepted()">YES</button>
+<button class="yes" onclick="accepted()">YES</button>
+</div>
+
+<!-- FORM PAGE -->
+<div class="page" id="page7">
+
+<h2>Enter your phone number</h2>
+<input id="phone" placeholder="Phone number"><br><br>
+
+<h2>What time are you available on Feb 14?</h2>
+<input id="time" type="time"><br><br>
+
+<button onclick="finish()">Submit</button>
+
+</div>
+
+<!-- RESULT PAGE -->
+<div class="page" id="page8">
+
+<h1>I HAVE ACCEPTED TO BE YOUR VALENTINE ❤️</h1>
+
+<p id="outfit"></p>
+<p id="place"></p>
+
+<!-- Compliment Generator -->
+<button onclick="compliment()">Give me a compliment</button>
+<p id="complimentText"></p>
+
+<!-- Map -->
+<iframe id="map" width="300" height="200"></iframe>
+
+<!-- Calendar -->
+<button onclick="calendar()">Add to Calendar</button>
+
+</div>
+
 <script>
-document.addEventListener("click", function(){
-  document.getElementById("music").play();
-});
+
+/* Navigation */
+function next(p){
+show(p);
+}
+
+function show(p){
+document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+document.getElementById("page"+p).classList.add("active");
+}
+
+/* Gender */
+function female(){
+show(2);
+}
+
+function male(){
+alert("bye bye my nigga");
+}
+
+/* Music */
+let music=document.getElementById("music");
+
+function playMusic(){ music.play(); }
+function pauseMusic(){ music.pause(); }
+
+/* Accepted */
+function accepted(){
+show(7);
+}
+
+/* Floating hearts */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.innerHTML="❤️";
+heart.className="heart";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(20+Math.random()*30)+"px";
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),6000);
+
+},500);
+
+/* Compliments */
+let compliments=[
+"You are unbelievably beautiful",
+"You make my heart calm",
+"You are my favorite notification",
+"Your smile is magical",
+"You make life better"
+];
+
+function compliment(){
+let c=compliments[Math.floor(Math.random()*compliments.length)];
+document.getElementById("complimentText").innerText=c;
+}
+
+/* Finish */
+function finish(){
+
+let outfits=[
+"Wear a red dress ❤️",
+"Wear something classy and elegant",
+"Wear pink outfit 💕",
+"Wear something you feel confident in"
+];
+
+let places=[
+"Zetech University Main Gate",
+"Cafe near Zetech University",
+"Garden area around Zetech",
+"Restaurant around Zetech University"
+];
+
+let outfit=outfits[Math.floor(Math.random()*outfits.length)];
+let place=places[Math.floor(Math.random()*places.length)];
+let time=document.getElementById("time").value;
+
+document.getElementById("outfit").innerText="Outfit: "+outfit;
+document.getElementById("place").innerText="Meetup: "+place+" at "+time;
+
+/* Map */
+document.getElementById("map").src=
+"https://www.google.com/maps?q="+place+"&output=embed";
+
+show(8);
+}
+
+/* Countdown to Feb 14 */
+let target=new Date("Feb 14, 2026 00:00:00").getTime();
+
+setInterval(()=>{
+let now=new Date().getTime();
+let diff=target-now;
+
+let d=Math.floor(diff/(1000*60*60*24));
+let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+let m=Math.floor((diff%(1000*60*60))/(1000*60));
+let s=Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML=
+"Countdown to Feb 14: "+d+"d "+h+"h "+m+"m "+s+"s";
+
+},1000);
+
+/* Calendar */
+function calendar(){
+let date="20260214T120000";
+window.open(
+"https://calendar.google.com/calendar/render?action=TEMPLATE&text=Valentine Meetup&dates="+date+"/"+date+"&details=Valentine Date"
+);
+}
+
 </script>
 
-<!-- Page 1 -->
-<div class="box" id="page1">
-  <h2>Welcome ❤️</h2>
-  <p>Enter your name</p>
-  <input id="name">
-  <p>Enter your phone number</p>
-  <input id="phone">
-  <p>Select your gender</p>
-  <button onclick="startStory('female')">Female</button>
-  <button onclick="startStory('male')">Male</button>
-</div>
-
-<!-- Flirty story pages -->
-<div class="box" id="story" style="display:none;">
-  <h2 id="message"></h2>
-  <button onclick="nextPage()">Next </button>
-</div>
-
-<!-- Valentine question -->
-<div class="box" id="valentine" style="display:none;">
-  <h2>Will you be my Valentine? 💖</h2>
-  <button onclick="yesAnswer()">YES ❤️</button>
-  <button onclick="yesAnswer()">YES 😍</button>
-</div>
-
-<!-- End page -->
-<div class="box" id="end" style="display:none;">
-  <h2 id="endMessage"></h2>
-</div>
-
-
-<script>
-/* Initialize EmailJS */
-(function(){
-  emailjs.init("gUxDJTQCgr53kVpTU"); // your public key
-})();
-
-/* Global variables */
-let userName = "";
-let userPhone = "";
-let currentPage = 0;
-
-/* Flirty messages */
-let flirtMessages = [
-  "From the moment I met you, something felt different ❤️",
-  "You make my world brighter every single day ☀️",
-  "Talking to you is my favorite part of the day 😊",
-  "I never believed in perfect smiles until I saw yours 😍",
-  "My heart feels peaceful whenever I think about you 💕"
-];
-
-/* Fonts per page */
-let fonts = [
-  "Arial, sans-serif",
-  "'Comic Sans MS', cursive, sans-serif",
-  "'Lucida Handwriting', cursive",
-  "'Georgia', serif",
-  "'Times New Roman', serif"
-];
-
-/* Font colors per page */
-let colors = [
-  "#FF4500",  // orange-red
-  "#32CD32",  // lime green
-  "#1E90FF",  // dodger blue
-  "#FF1493",  // deep pink
-  "#800080"   // purple
-];
-
-/* Clothing suggestions */
-let clothingSuggestions = [
-  "a pretty red dress 💃",
-  "something casual and comfy 👗",
-  "your favorite cute outfit 😍",
-  "something elegant and charming ✨",
-  "a playful skirt and top 🌸"
-];
-
-/* Meeting places around Zetech University */
-let meetingPlaces = [
-  "Zetech Campus Garden",
-  "Main Cafeteria area",
-  "Library Lawn",
-  "Nearby Coffee Spot",
-  "Sports Field"
-];
-
-/* Start story */
-function startStory(gender){
-  userName = document.getElementById("name").value.trim();
-  userPhone = document.getElementById("phone").value.trim();
-
-  if(userName === "" || userPhone === ""){
-    alert("Please enter your name and phone number");
-    return;
-  }
-
-  document.getElementById("page1").style.display="none";
-
-  if(gender === "male"){
-    document.getElementById("end").style.display="block";
-    document.getElementById("endMessage").innerText = "Bye bye my nigga";
-    sendEmail("Male visitor:\nName: " + userName + "\nPhone: " + userPhone);
-    return;
-  }
-
-  currentPage = 0;
-  document.getElementById("story").style.display="block";
-  showMessage();
-}
-
-/* Show message with font + color */
-function showMessage(){
-  let message = document.getElementById("message");
-  message.innerText = flirtMessages[currentPage];
-  message.style.fontFamily = fonts[currentPage];
-  message.style.color = colors[currentPage];
-}
-
-/* Next page */
-function nextPage(){
-  currentPage++;
-  if(currentPage < flirtMessages.length){
-    showMessage();
-  } else {
-    document.getElementById("story").style.display="none";
-    document.getElementById("valentine").style.display="block";
-  }
-}
-
-/* Valentine YES */
-function yesAnswer(){
-  document.getElementById("valentine").style.display="none";
-  document.getElementById("end").style.display="block";
-
-  // Random clothing & meeting place & time
-  let clothing = clothingSuggestions[Math.floor(Math.random()*clothingSuggestions.length)];
-  let place = meetingPlaces[Math.floor(Math.random()*meetingPlaces.length)];
-
-  // Random time between 10:00 AM and 8:00 PM
-  let hour = Math.floor(Math.random()*10) + 10; // 10 - 19
-  let minute = Math.floor(Math.random()*60);
-  let ampm = hour < 12 ? "AM" : "PM";
-  let displayHour = hour > 12 ? hour - 12 : hour;
-  let displayMinute = minute < 10 ? "0"+minute : minute;
-  let meetTime = displayHour + ":" + displayMinute + " " + ampm;
-
-  let meetDate = "14th"; // fixed
-
-  document.getElementById("endMessage").innerText =
-    "I have accepted to be your Valentine ❤️🥰\n\n" +
-    "Let's meet at " + place + " on " + meetDate + " at " + meetTime + " and wear " + clothing + " 🌸";
-
-  sendEmail(
-    "She accepted your Valentine request ❤️\n" +
-    "Name: " + userName + "\n" +
-    "Phone: " + userPhone + "\n" +
-    "Meeting place: " + place + "\n" +
-    "Date: " + meetDate + "\n" +
-    "Time: " + meetTime + "\n" +
-    "Clothing: " + clothing
-  );
-}
-
-/* Send email using EmailJS */
-function sendEmail(message){
-  emailjs.send("service_7h95teq","template_541whrq",{
-    message: message
-  });
-}
-</script>
-
-<!-- Copyright -->
-<div id="copyright">© Bett 2026</div>
+<footer>
+© Bett 2026
+</footer>
 
 </body>
 </html>

@@ -21,7 +21,7 @@ margin:0;
 .active{display:block;}
 
 button{
-padding:12px 20px;
+padding:12px 22px;
 font-size:18px;
 border:none;
 border-radius:12px;
@@ -49,7 +49,7 @@ font-size:12px;
 .heart{
 position:fixed;
 bottom:-20px;
-font-size:20px;
+font-size:22px;
 animation:float 6s linear infinite;
 }
 @keyframes float{
@@ -80,8 +80,7 @@ border-radius:15px;
 <audio id="music" loop>
 <source src="perfect.mp3">
 </audio>
-
-<button onclick="music.play()">Play Music 🎵</button>
+<button onclick="document.getElementById('music').play()">Play Music 🎵</button>
 
 <h2 id="countdown"></h2>
 
@@ -93,7 +92,7 @@ border-radius:15px;
 </div>
 
 <div class="page" id="malePage">
-<h2>Thanks for visiting 💙</h2>
+<h2>Bye bye my nigga 💙</h2>
 </div>
 
 <!-- FLIRT PAGES -->
@@ -134,14 +133,14 @@ border-radius:15px;
 
 <h3>Select University</h3>
 <select id="university">
+<option>Zetech University</option>
 <option>University of Nairobi</option>
-<option>Moi University</option>
 <option>Kenyatta University</option>
+<option>Moi University</option>
 <option>Egerton University</option>
 <option>Maseno University</option>
 <option>JKUAT</option>
 <option>Technical University of Kenya</option>
-<option>Zetech University</option>
 <option>Strathmore University</option>
 <option>USIU</option>
 <option>Mount Kenya University</option>
@@ -150,7 +149,7 @@ border-radius:15px;
 <option>Kenya Methodist University</option>
 <option>Kisii University</option>
 <option>Kabianga University</option>
-<option>Chuka university</option>
+<option>Chuka University</option>
 </select>
 
 <h3>Meeting Place</h3>
@@ -160,6 +159,7 @@ border-radius:15px;
 <option>Cafeteria</option>
 <option>Garden</option>
 <option>Parking Area</option>
+<option>Student Centre</option>
 </select>
 
 <h3>Meeting Time Feb 14</h3>
@@ -191,18 +191,18 @@ border-radius:15px;
 
 <script>
 
+/* Initialize EmailJS */
 emailjs.init("gUxDJTQCgr53kVpTU");
 
-/* Navigation */
+/* Page Navigation */
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
-
 function female(){show("p1");}
 function male(){show("malePage");}
 
-/* Hearts */
+/* Floating Hearts */
 setInterval(()=>{
 let h=document.createElement("div");
 h.innerHTML="❤️";
@@ -235,51 +235,34 @@ let target=new Date("Feb 14, 2026").getTime();
 setInterval(()=>{
 let now=new Date().getTime();
 let diff=target-now;
-
 let d=Math.floor(diff/(1000*60*60*24));
 let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
 let m=Math.floor((diff%(1000*60*60))/(1000*60));
 let s=Math.floor((diff%(1000*60))/1000);
-
-countdown.innerHTML=`Countdown: ${d}d ${h}h ${m}m ${s}s`;
-
+document.getElementById("countdown").innerText=`Countdown: ${d}d ${h}h ${m}m ${s}s`;
 },1000);
 
 /* Compliments */
-let compliments=[
-"You are breathtaking ❤️",
-"You make life sweeter 💕",
-"You are unforgettable ✨"
-];
-
+let compliments=["You are breathtaking ❤️","You make life sweeter 💕","You are unforgettable ✨"];
 function compliment(){
-complimentText.innerText=
-compliments[Math.floor(Math.random()*compliments.length)];
+complimentText.innerText=compliments[Math.floor(Math.random()*compliments.length)];
 }
 
 /* Slideshow */
 let photos=["photo1.jpg","photo2.jpg","photo3.jpg"];
 let i=0;
-setInterval(()=>{
-i=(i+1)%photos.length;
-slide.src=photos[i];
-},3000);
+setInterval(()=>{i=(i+1)%photos.length; slide.src=photos[i];},3000);
 
-/* Finish */
+/* Finish function with EmailJS fixed */
 function finish(){
-
-let phone=country.value + document.getElementById("phone").value;
-let uni=university.value;
+let phone = country.value + document.getElementById("phone").value;
+let uni = university.value;
 let place=document.getElementById("place").value;
 let time=document.getElementById("time").value;
 
-if(time=="" || phone==""){
-alert("Fill all fields");
-return;
-}
+if(time=="" || phone==""){ alert("Fill all fields"); return; }
 
 let meet=uni+" - "+place+" at "+time;
-
 details.innerText=meet;
 
 /* Outfit */
@@ -289,17 +272,19 @@ outfit.innerText="Suggested Outfit: "+outfits[Math.floor(Math.random()*outfits.l
 /* Map */
 map.src="https://www.google.com/maps?q="+uni+"&output=embed";
 
-/* Email */
+/* EmailJS send with success/fail alert */
 emailjs.send("service_7h95teq","template_541whrq",{
-meeting_details:meet,
-phone_number:phone
-});
+    meeting_details: meet,
+    phone_number: phone
+})
+.then(()=>alert("Email sent successfully ✅"))
+.catch((err)=>alert("Email failed ❌ Check template or service"));
 
 /* WhatsApp HER */
 window.open("https://wa.me/"+phone+"?text=Hi ❤️ I accepted Valentine. Meeting at "+meet);
 
 /* WhatsApp YOU */
-window.open("https://wa.me/13165168543?text= Hi baby, I have accepted to be your valentine and we shall meet in "+meet);
+window.open("https://wa.me/13165168543?text=Hi baby, I have accepted to be your valentine and we shall meet in "+meet);
 
 /* Reminder Simulation */
 setTimeout(()=>alert("Reminder 30 minutes left ❤️"),10000);
@@ -308,7 +293,6 @@ setTimeout(()=>alert("Reminder 10 minutes left ❤️"),30000);
 setTimeout(()=>alert("Reminder 5 minutes left ❤️"),40000);
 
 show("result");
-
 }
 
 /* Calendar */
@@ -321,9 +305,4 @@ window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text=Va
 <footer>© Bett 2026</footer>
 
 </body>
-</html>
-
-
-
-
-
+  </html>

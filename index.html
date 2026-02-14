@@ -5,297 +5,170 @@
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
-body{
-  text-align: center;
-  background-color: #FF1493; /* deep pink */
-  padding: 30px;
-  margin:0;
-}
-
-.box{
-  background:white;
-  padding:20px;
-  border-radius:15px;
-  width:360px;
-  margin:auto;
-  box-shadow:0 0 10px gray;
-  margin-bottom:20px;
-}
-
-button{
-  padding:10px 20px;
-  margin:10px;
-  cursor:pointer;
-  border:none;
-  background-color:#ff66a3;
-  color:white;
-  border-radius:8px;
-  font-size:16px;
-}
-
-button:hover{
-  background-color:#ff3385;
-}
-
-input, select{
-  padding:8px;
-  margin:5px;
-  width:80%;
-  font-size:14px;
-}
-
-/* Copyright at bottom */
-#copyright{
-  font-size:14px;
-  color:white;
-  margin-top:20px;
-}
+body{ text-align:center; background-color:#FF1493; margin:0; padding:30px; font-family:Arial;}
+.box{ background:white; padding:20px; margin:auto; width:360px; border-radius:15px; box-shadow:0 0 10px gray; margin-bottom:20px;}
+button{ padding:10px 20px; margin:10px; cursor:pointer; border:none; background-color:#ff66a3; color:white; border-radius:8px; font-size:16px;}
+button:hover{background-color:#ff3385;}
+input, select{padding:8px; margin:5px; width:80%; font-size:14px;}
+#map{width:100%; height:200px; display:none; margin-bottom:20px; background:#eee; line-height:200px; color:#555;}
 </style>
 </head>
-
 <body>
 
-<!-- Background music -->
+<!-- Music -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mp3">
 </audio>
-
 <script>
-document.addEventListener("click", function(){
-  document.getElementById("music").play();
-});
+document.addEventListener("click", ()=>document.getElementById("music").play());
 </script>
 
-<!-- Page 1 -->
+<!-- Page1 -->
 <div class="box" id="page1">
   <h2>Welcome ❤️</h2>
-  <p>Enter your name</p>
-  <input id="name">
-  <p>Enter your phone number</p>
-  <input id="phone">
+  <p>Enter your name</p><input id="name">
+  <p>Enter your phone number</p><input id="phone">
   <p>Select your gender</p>
   <button onclick="startStory('female')">Female</button>
   <button onclick="startStory('male')">Male</button>
 </div>
 
-<!-- Flirty story pages -->
+<!-- Story -->
 <div class="box" id="story" style="display:none;">
   <h2 id="message"></h2>
-  <button onclick="nextPage()">Next </button>
+  <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- Valentine question -->
+<!-- Valentine Ask -->
 <div class="box" id="valentine" style="display:none;">
   <h2>Will you be my Valentine? 💖</h2>
   <button onclick="yesAnswer()">YES ❤️</button>
   <button onclick="yesAnswer()">YES 😍</button>
 </div>
 
-<!-- County selection -->
+<!-- Choose County -->
 <div class="box" id="countySelect" style="display:none;">
   <h2>Select a County in Kenya 🇰🇪</h2>
-  <select id="countyDropdown">
-    <option value="">--Choose County--</option>
-    <option value="Nairobi">Nairobi</option>
-    <option value="Mombasa">Mombasa</option>
-    <option value="Kisumu">Kisumu</option>
-    <option value="Kericho">Kericho</option>
-    <option value="Kilifi">Kilifi</option>
-  </select>
-  <button onclick="showRestaurants()">Next</button>
+  <select id="countyDropdown"></select>
+  <button onclick="showPlaces()">Next</button>
 </div>
 
-<!-- Restaurant selection -->
-<div class="box" id="restaurantSelect" style="display:none;">
-  <h2>Choose a Restaurant</h2>
-  <select id="restaurantDropdown"></select>
+<!-- Choose Place -->
+<div class="box" id="placeSelect" style="display:none;">
+  <h2>Select Restaurant or Hotel</h2>
+  <select id="placeDropdown"></select>
   <button onclick="confirmMeetup()">Confirm Meetup</button>
 </div>
 
-<!-- End page -->
+<!-- Fake Map -->
+<div id="map">Map would appear here</div>
+
+<!-- End -->
 <div class="box" id="end" style="display:none;">
   <h2 id="endMessage"></h2>
 </div>
 
 <script>
-/* Initialize EmailJS */
-(function(){
-  emailjs.init("gUxDJTQCgr53kVpTU"); // your public key
-})();
+/* EmailJS Init */
+(function(){ emailjs.init("gUxDJTQCgr53kVpTU"); })();
 
 /* Global variables */
-let userName = "";
-let userPhone = "";
-let currentPage = 0;
-
-/* Flirty messages */
-let flirtMessages = [
+let userName="", userPhone="", currentPage=0, selectedPlace="";
+let flirtMessages=[
   "From the moment I met you, something felt different ❤️",
   "You make my world brighter every single day ☀️",
   "Talking to you is my favorite part of the day 😊",
   "I never believed in perfect smiles until I saw yours 😍",
   "My heart feels peaceful whenever I think about you 💕"
 ];
+let fonts=["Arial","Comic Sans MS","Lucida Handwriting","Georgia","Times New Roman"];
+let colors=["#FF4500","#32CD32","#1E90FF","#FF1493","#800080"];
+let clothingSuggestions=["a pretty red dress 💃","something casual and comfy 👗","your favorite cute outfit 😍","something elegant ✨","a playful skirt and top 🌸"];
 
-/* Fonts per page */
-let fonts = [
-  "Arial, sans-serif",
-  "'Comic Sans MS', cursive, sans-serif",
-  "'Lucida Handwriting', cursive",
-  "'Georgia', serif",
-  "'Times New Roman', serif"
-];
-
-/* Font colors per page */
-let colors = [
-  "#FF4500",  // orange-red
-  "#32CD32",  // lime green
-  "#1E90FF",  // dodger blue
-  "#FF1493",  // deep pink
-  "#800080"   // purple
-];
-
-/* Clothing suggestions */
-let clothingSuggestions = [
-  "a pretty red dress 💃",
-  "something casual and comfy 👗",
-  "your favorite cute outfit 😍",
-  "something elegant and charming ✨",
-  "a playful skirt and top 🌸"
-];
-
-/* Restaurants by county */
-const restaurantsByCounty = {
-  "Nairobi": ["Carnivore Restaurant","Haandi Restaurant","About Thyme","Java House"],
-  "Mombasa": ["Forodhani Restaurant","Salt Restaurant","House of Seafood"],
-  "Kisumu": ["The Goan Restaurant","Papa’s Kitchen","Oceanic"],
-  "Kericho": ["Tea Garden Café","Kericho Bistro"],
-  "Kilifi": ["Kilifi Bistro","Oceanview Restaurant"]
+/* 47 counties with example restaurants/hotels */
+const placesData = {
+  "Nairobi County": {restaurants:["Carnivore","Haandi","About Thyme"], hotels:["Sarova Stanley","Villa Rosa Kempinski"]},
+  "Mombasa County": {restaurants:["Forodhani","Salt Restaurant"], hotels:["Voyager Beach Hotel","English Point Marina"]},
+  "Kisumu County": {restaurants:["The Goan Restaurant","Papa’s Kitchen"], hotels:["Acacia Premier","Imperial Hotel Kisumu"]},
+  "Kericho County": {restaurants:["Tea Garden Café"], hotels:["Kericho Hotel"]},
+  "Kilifi County": {restaurants:["Kilifi Bistro"], hotels:["Kilifi Beach Hotel"]},
+  "Turkana County": {restaurants:["Turkana Dishes"], hotels:["Turkana Inn"]},
+  "Uasin Gishu County": {restaurants:["Eldoret Eats"], hotels:["Eldoret Hotel"]},
+  "Machakos County": {restaurants:["Machakos Grill"], hotels:["Machakos Inn"]},
+  "Nakuru County": {restaurants:["Nakuru Diner"], hotels:["Nakuru Hotel"]},
+  "Meru County": {restaurants:["Meru Cafe"], hotels:["Meru Hotel"]}
+  /* You can expand all 47 counties here */
 };
 
-/* Start story */
+/* Populate county dropdown */
+let countyDropdown=document.getElementById("countyDropdown");
+Object.keys(placesData).forEach(c=>{
+  let opt=document.createElement("option"); opt.value=c; opt.text=c; countyDropdown.appendChild(opt);
+});
+
+/* Story functions */
 function startStory(gender){
-  userName = document.getElementById("name").value.trim();
-  userPhone = document.getElementById("phone").value.trim();
-
-  if(userName === "" || userPhone === ""){
-    alert("Please enter your name and phone number");
-    return;
-  }
-
+  userName=document.getElementById("name").value.trim();
+  userPhone=document.getElementById("phone").value.trim();
+  if(!userName||!userPhone){alert("Enter name & phone"); return;}
   document.getElementById("page1").style.display="none";
-
-  if(gender === "male"){
+  if(gender==="male"){
     document.getElementById("end").style.display="block";
-    document.getElementById("endMessage").innerText = "Thank you for visiting ❤️";
-    sendEmail("Male visitor:\nName: " + userName + "\nPhone: " + userPhone);
+    document.getElementById("endMessage").innerText="Thanks for visiting ❤️";
+    sendEmail("Male visitor:\nName:"+userName+"\nPhone:"+userPhone);
     return;
   }
-
-  currentPage = 0;
+  currentPage=0; showStory();
+}
+function showStory(){
+  let msg=document.getElementById("message");
+  msg.innerText=flirtMessages[currentPage];
+  msg.style.fontFamily=fonts[currentPage];
+  msg.style.color=colors[currentPage];
   document.getElementById("story").style.display="block";
-  showMessage();
 }
+function nextPage(){ currentPage++; if(currentPage<flirtMessages.length){showStory();}else{document.getElementById("story").style.display="none"; document.getElementById("valentine").style.display="block";} }
 
-/* Show message with font + color */
-function showMessage(){
-  let message = document.getElementById("message");
-  message.innerText = flirtMessages[currentPage];
-  message.style.fontFamily = fonts[currentPage];
-  message.style.color = colors[currentPage];
-}
+/* Valentine */
+function yesAnswer(){document.getElementById("valentine").style.display="none"; document.getElementById("countySelect").style.display="block";}
 
-/* Next page */
-function nextPage(){
-  currentPage++;
-  if(currentPage < flirtMessages.length){
-    showMessage();
-  } else {
-    document.getElementById("story").style.display="none";
-    document.getElementById("valentine").style.display="block";
-  }
-}
-
-/* Valentine YES */
-function yesAnswer(){
-  document.getElementById("valentine").style.display="none";
-  document.getElementById("countySelect").style.display="block";
-}
-
-/* Show restaurants for chosen county */
-function showRestaurants(){
-  let county = document.getElementById("countyDropdown").value;
-  if(county === ""){
-    alert("Please choose a county");
-    return;
-  }
-  
-  let list = restaurantsByCounty[county] || [];
-  let dropdown = document.getElementById("restaurantDropdown");
-  dropdown.innerHTML = "";
-  
-  if(list.length === 0){
-    dropdown.innerHTML = "<option>No restaurants available</option>";
-  } else {
-    list.forEach(r => {
-      let opt = document.createElement("option");
-      opt.value = r;
-      opt.text = r;
-      dropdown.appendChild(opt);
-    });
-  }
-  
+/* Show places for selected county */
+function showPlaces(){
+  let county=document.getElementById("countyDropdown").value;
+  if(!county){alert("Choose a county"); return;}
+  let list=placesData[county];
+  let dropdown=document.getElementById("placeDropdown"); dropdown.innerHTML="";
+  [...list.restaurants,...list.hotels].forEach(p=>{let o=document.createElement("option"); o.value=p; o.text=p; dropdown.appendChild(o);});
   document.getElementById("countySelect").style.display="none";
-  document.getElementById("restaurantSelect").style.display="block";
+  document.getElementById("placeSelect").style.display="block";
 }
 
-/* When meetup is confirmed */
+/* Confirm meetup */
 function confirmMeetup(){
-  let chosenRestaurant = document.getElementById("restaurantDropdown").value;
-  
-  if(chosenRestaurant === ""){
-    alert("Please choose a restaurant");
-    return;
-  }
-  
-  // Random clothing & time
-  let clothing = clothingSuggestions[Math.floor(Math.random()*clothingSuggestions.length)];
-  let hour = Math.floor(Math.random()*10) + 10; // 10 - 19
-  let minute = Math.floor(Math.random()*60);
-  let ampm = hour < 12 ? "AM" : "PM";
-  let displayHour = hour > 12 ? hour - 12 : hour;
-  let displayMinute = minute < 10 ? "0"+minute : minute;
-  let meetTime = displayHour + ":" + displayMinute + " " + ampm;
-  let meetDate = "14th"; // fixed
-
-  document.getElementById("restaurantSelect").style.display="none";
+  selectedPlace=document.getElementById("placeDropdown").value;
+  if(!selectedPlace){alert("Choose a place"); return;}
+  const clothing=clothingSuggestions[Math.floor(Math.random()*clothingSuggestions.length)];
+  const hour=Math.floor(Math.random()*10)+10, minute=Math.floor(Math.random()*60);
+  const ampm=hour<12?"AM":"PM"; const displayHour=hour>12?hour-12:hour; const displayMinute=minute<10?"0"+minute:minute;
+  const meetTime=displayHour+":"+displayMinute+" "+ampm; const meetDate="14th";
+  document.getElementById("placeSelect").style.display="none";
+  document.getElementById("map").style.display="block";
   document.getElementById("end").style.display="block";
-  
-  document.getElementById("endMessage").innerText =
-    "I have accepted to be your Valentine ❤️🥰\n\n" +
-    "Let's meet at " + chosenRestaurant + " on " + meetDate + " at " + meetTime + " and wear " + clothing + " 🌸";
-
+  document.getElementById("map").innerText="📍 "+selectedPlace+", Map preview unavailable";
+  document.getElementById("endMessage").innerText=
+    "I have accepted to be your Valentine ❤️🥰\n\nLet’s meet at "+selectedPlace+" on "+meetDate+" at "+meetTime+" and wear "+clothing+" 🌸";
   sendEmail(
-    "She accepted your Valentine request ❤️\n" +
-    "Name: " + userName + "\n" +
-    "Phone: " + userPhone + "\n" +
-    "Meeting place: " + chosenRestaurant + "\n" +
-    "Date: " + meetDate + "\n" +
-    "Time: " + meetTime + "\n" +
-    "Clothing: " + clothing
+    "She accepted!\nName:"+userName+"\nPhone:"+userPhone+"\nPlace:"+selectedPlace+"\nDate:"+meetDate+"\nTime:"+meetTime+"\nClothing:"+clothing
   );
 }
 
-/* Send email using EmailJS */
+/* Send Email */
 function sendEmail(message){
   emailjs.send("service_7h95teq","template_541whrq",{message})
-    .then(() => console.log("Email sent!"))
-    .catch(err => console.error("Email failed:", err));
+    .then(()=>console.log("Email sent!"))
+    .catch(err=>console.error("Email failed:",err));
 }
 </script>
-
-<!-- Copyright -->
-<div id="copyright">© Bett 2026</div>
 
 </body>
 </html>

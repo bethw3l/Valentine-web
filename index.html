@@ -4,20 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Someone Special ❤️</title>
-<!-- LIVE CLOCK SECTION -->
-<section class="card">
-<h2>⏰ Our Time Together</h2>
-
-<p>🇰🇪 Your Time</p>
-<div id="kenyaClock" class="clock"></div>
-
-<p>🇺🇸 My Time (Pacific Time)</p>
-<div id="usaClock" class="clock"></div>
-
-</section>
 
 <style>
-
 body{
     font-family: Arial, sans-serif;
     text-align:center;
@@ -42,7 +30,6 @@ section{
 .carousel{
     width:80%;
     margin:auto;
-    overflow:hidden;
 }
 
 .carousel img{
@@ -102,6 +89,10 @@ section{
     border-radius:15px;
 }
 
+.clock{
+    font-size:24px;
+}
+
 button{
     padding:10px 20px;
     border:none;
@@ -109,7 +100,6 @@ button{
     background:pink;
     cursor:pointer;
 }
-
 </style>
 </head>
 
@@ -137,12 +127,27 @@ document.addEventListener("click", function(){
 
 <h1>💖 For Someone Very Special 💖</h1>
 
+<!-- CLOCK SECTION -->
+<section class="card">
+<h2>⏰ Our Time Together</h2>
+
+<p>🇰🇪 Your Time</p>
+<div id="kenyaClock" class="clock"></div>
+
+<p>🇺🇸 My Time (Pacific Time)</p>
+<div id="usaClock" class="clock"></div>
+
+<p id="greetingMessage"></p>
+<p id="awakeMessage"></p>
+
+</section>
+
 <!-- Love Letter -->
 <section class="card">
 <h2>💌 A Message From My Heart</h2>
 <p>
 Even though distance separates us, you are always in my thoughts.
-You bring peace and happiness into my life.
+You bring peace and happiness into my life. ILYSM 💕💕
 </p>
 </section>
 
@@ -206,7 +211,7 @@ setInterval(()=>{
     document.getElementById("carouselImg").src=photos[index];
 },3000);
 
-/* Fullscreen Gallery */
+/* Fullscreen */
 function openFullscreen(src){
     document.getElementById("fullscreen").style.display="flex";
     document.getElementById("fullImg").src=src;
@@ -221,10 +226,10 @@ function quiz(correct){
     if(correct)
         document.getElementById("quizResult").innerText="Exactly ❤️";
     else
-        document.getElementById("quizResult").innerText="Nooo 😄 You are special because of who you are!";
+        document.getElementById("quizResult").innerText="Nooo 😄 You are special because of who you are! you are more than special";
 }
 
-/* Floating Hearts Generator */
+/* Floating Hearts */
 setInterval(()=>{
     let heart=document.createElement("div");
     heart.className="heart";
@@ -233,18 +238,50 @@ setInterval(()=>{
     heart.style.fontSize=(Math.random()*20+15)+"px";
 
     document.body.appendChild(heart);
-
     setTimeout(()=> heart.remove(),6000);
-
 },800);
-/* LIVE CLOCKS */
+
+/* LIVE CLOCK + GREETING + AWAKE CHECK */
 function updateClocks(){
 
-    let kenyaTime = new Date().toLocaleTimeString("en-GB",{timeZone:"Africa/Nairobi"});
-    let usaTime = new Date().toLocaleTimeString("en-US",{timeZone:"America/Los_Angeles"});
+    let kenyaDate=new Date().toLocaleString("en-US",{timeZone:"Africa/Nairobi"});
+    let usaDate=new Date().toLocaleString("en-US",{timeZone:"America/Los_Angeles"});
 
-    document.getElementById("kenyaClock").innerText = kenyaTime;
-    document.getElementById("usaClock").innerText = usaTime;
+    let kenyaTime=new Date(kenyaDate);
+    let usaTime=new Date(usaDate);
+
+    document.getElementById("kenyaClock").innerText=kenyaTime.toLocaleTimeString();
+    document.getElementById("usaClock").innerText=usaTime.toLocaleTimeString();
+
+    /* Greeting based on her time */
+    let h=kenyaTime.getHours();
+    let greeting="";
+
+    if(h>=5 && h<12)
+        greeting="🌅 Good Morning! I hope your day starts beautifully, blessed day ahead.";
+    else if(h>=12 && h<17)
+        greeting="☀️ Good Afternoon! I hope your day is going well.";
+    else if(h>=17 && h<21)
+        greeting="🌇 Good Evening! I hope you're having a nice evening.";
+    else
+        greeting="🌙 Good Night! I hope you sleep peacefully and dream sweetly.";
+
+    document.getElementById("greetingMessage").innerText=greeting;
+
+    /* Both awake check */
+    let usaH=usaTime.getHours();
+
+    let kenyaAwake=h>=7 && h<=23;
+    let usaAwake=usaH>=7 && usaH<=23;
+
+    if(kenyaAwake && usaAwake){
+        document.getElementById("awakeMessage").innerText =
+        "❤️ Looks like we're both awake.";
+    }
+    else{
+        document.getElementById("awakeMessage").innerText =
+        "💫 Even when our times differ, you're always in my thoughts.";
+    }
 }
 
 setInterval(updateClocks,1000);
@@ -254,6 +291,3 @@ updateClocks();
 
 </body>
 </html>
-
-
-

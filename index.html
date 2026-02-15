@@ -6,6 +6,7 @@
 <title>For Someone Special ❤️</title>
 
 <style>
+
 body{
     font-family: Arial, sans-serif;
     text-align:center;
@@ -15,9 +16,7 @@ body{
     transition: background 2s;
 }
 
-section{
-    padding:50px;
-}
+section{ padding:50px; }
 
 .card{
     background: rgba(0,0,0,0.5);
@@ -26,19 +25,11 @@ section{
     border-radius:15px;
 }
 
-/* Photo Carousel */
-.carousel{
-    width:80%;
-    margin:auto;
-}
+/* Carousel */
+.carousel{ width:80%; margin:auto; }
+.carousel img{ width:100%; border-radius:15px; cursor:pointer; }
 
-.carousel img{
-    width:100%;
-    border-radius:15px;
-    cursor:pointer;
-}
-
-/* Fullscreen Gallery */
+/* Fullscreen */
 #fullscreen{
     display:none;
     position:fixed;
@@ -89,9 +80,7 @@ section{
     border-radius:15px;
 }
 
-.clock{
-    font-size:24px;
-}
+.clock{ font-size:24px; }
 
 button{
     padding:10px 20px;
@@ -100,6 +89,68 @@ button{
     background:pink;
     cursor:pointer;
 }
+
+/* Gradient Verse */
+.gradientVerse{
+    font-size:20px;
+    font-weight:bold;
+    background: linear-gradient(45deg,#ff6b81,#ffd166,#06d6a0,#4cc9f0,#c77dff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation: gradientMove 6s infinite linear;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0%}
+    100%{background-position:300%}
+}
+
+/* Sparkle */
+.gradientVerse::after{
+    content:" ✨";
+    animation: sparkle 1.5s infinite alternate;
+}
+
+@keyframes sparkle{
+    from{opacity:0.3;}
+    to{opacity:1;}
+}
+
+.verseMessage{
+    font-style:italic;
+    margin-top:10px;
+    color:#ffd6e0;
+}
+
+/* Mood Buttons */
+.moodButtons button{
+    font-size:28px;
+    margin:8px;
+    padding:12px 16px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.moodButtons button:hover{
+    transform:scale(1.3);
+    background:pink;
+}
+
+/* Music Pulse */
+.musicPulse{
+    animation: pulseBeat 1.8s infinite;
+}
+
+@keyframes pulseBeat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.05);}
+    100%{transform:scale(1);}
+}
+
 </style>
 </head>
 
@@ -107,30 +158,28 @@ button{
 
 <!-- Popup -->
 <div id="popup">
-    <div id="popupContent">
-        <h2>❤️ A Message For You</h2>
-        <p>You crossed my mind today… like you always do.</p>
-        <button onclick="closePopup()">Open Website</button>
-    </div>
+<div id="popupContent">
+<h2>❤️ A Message For You</h2>
+<p>You crossed my mind today… like you always do.</p>
+<button onclick="closePopup()">Open Website</button>
+</div>
 </div>
 
-<!-- Background music -->
 <audio id="music" loop>
-  <source src="perfect.mp3" type="audio/mp3">
+<source src="perfect.mp3" type="audio/mp3">
 </audio>
 
 <script>
-document.addEventListener("click", function(){
-  document.getElementById("music").play();
+document.addEventListener("click", ()=>{
+document.getElementById("music").play();
 });
 </script>
 
 <h1>💖 For Someone Very Special 💖</h1>
 
-<!-- CLOCK SECTION -->
+<!-- CLOCK -->
 <section class="card">
 <h2>⏰ Our Time Together</h2>
-
 <p>🇰🇪 Your Time</p>
 <div id="kenyaClock" class="clock"></div>
 
@@ -139,26 +188,20 @@ document.addEventListener("click", function(){
 
 <p id="greetingMessage"></p>
 <p id="awakeMessage"></p>
-
 </section>
 
 <!-- Love Letter -->
 <section class="card">
 <h2>💌 A Message From My Heart</h2>
-<p>
-Even though distance separates us, you are always in my thoughts.
-You bring peace and happiness into my life. ILYSM 💕💕
-</p>
+<p id="typingLetter"></p>
 </section>
 
 <!-- Carousel -->
 <section class="card">
 <h2>📷 Memories</h2>
-
 <div class="carousel">
-    <img id="carouselImg" src="photo1.jpeg" onclick="openFullscreen(this.src)">
+<img id="carouselImg" src="photo1.jpeg" onclick="openFullscreen(this.src)">
 </div>
-
 </section>
 
 <!-- Quiz -->
@@ -173,121 +216,169 @@ You bring peace and happiness into my life. ILYSM 💕💕
 <!-- Scripture -->
 <section class="card">
 <h2>🙏 A Verse For You</h2>
-<p>
-"The steadfast love of the Lord never ceases,<br>
-his mercies never come to an end;<br>
-they are new every morning;<br>
-great is thy faithfulness."
+
+<p id="verseDisplay" class="gradientVerse">
+"The steadfast love of the Lord never ceases..."
 </p>
-<p>— Lamentations 3:22-23 (RSV)</p>
+
+<p id="verseMessage" class="verseMessage">
+This verse is for you today ❤️
+</p>
+
+<h3>💕 How are you feeling today my love?</h3>
+
+<div class="moodButtons">
+<button onclick="showMoodVerse('happy')">😊</button>
+<button onclick="showMoodVerse('sad')">😔</button>
+<button onclick="showMoodVerse('stressed')">😣</button>
+<button onclick="showMoodVerse('loved')">🥰</button>
+<button onclick="showMoodVerse('tired')">😴</button>
+</div>
+
 </section>
 
-<!-- Fullscreen Gallery -->
+<!-- Fullscreen -->
 <div id="fullscreen" onclick="closeFullscreen()">
-    <img id="fullImg">
+<img id="fullImg">
 </div>
 
 <script>
 
-/* Background color changer */
+/* Background Colors */
 let colors=["#ff758c","#ff7eb3","#6a11cb","#2575fc","#ff9966"];
 let i=0;
 setInterval(()=>{
-    document.body.style.background=colors[i];
-    i=(i+1)%colors.length;
+document.body.style.background=colors[i];
+i=(i+1)%colors.length;
 },3000);
 
 /* Popup */
 function closePopup(){
-    document.getElementById("popup").style.display="none";
+document.getElementById("popup").style.display="none";
 }
+
+/* Typing Letter */
+let loveText="Even though distance separates us, you are always in my thoughts. You bring peace and happiness into my life. ILYSM 💕💕";
+let letterIndex=0;
+
+function typeLetter(){
+if(letterIndex<loveText.length){
+document.getElementById("typingLetter").innerHTML+=loveText.charAt(letterIndex);
+letterIndex++;
+setTimeout(typeLetter,40);
+}
+}
+typeLetter();
 
 /* Carousel */
 let photos=["photo1.jpeg","photo2.jpeg","photo3.jpeg","photo4.jpeg"];
 let index=0;
-
 setInterval(()=>{
-    index=(index+1)%photos.length;
-    document.getElementById("carouselImg").src=photos[index];
+index=(index+1)%photos.length;
+document.getElementById("carouselImg").src=photos[index];
 },3000);
 
 /* Fullscreen */
 function openFullscreen(src){
-    document.getElementById("fullscreen").style.display="flex";
-    document.getElementById("fullImg").src=src;
+document.getElementById("fullscreen").style.display="flex";
+document.getElementById("fullImg").src=src;
 }
-
 function closeFullscreen(){
-    document.getElementById("fullscreen").style.display="none";
+document.getElementById("fullscreen").style.display="none";
 }
 
 /* Quiz */
 function quiz(correct){
-    if(correct)
-        document.getElementById("quizResult").innerText="Exactly ❤️";
-    else
-        document.getElementById("quizResult").innerText="Nooo 😄 You are special because of who you are! you are more than special";
+document.getElementById("quizResult").innerText=
+correct ? "Exactly ❤️" : "Nooo 😄 You are more than special";
 }
 
-/* Floating Hearts */
+/* Hearts */
 setInterval(()=>{
-    let heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML="❤️";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.fontSize=(Math.random()*20+15)+"px";
-
-    document.body.appendChild(heart);
-    setTimeout(()=> heart.remove(),6000);
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
 },800);
 
-/* LIVE CLOCK + GREETING + AWAKE CHECK */
+/* CLOCK + GREETING */
 function updateClocks(){
 
-    let kenyaDate=new Date().toLocaleString("en-US",{timeZone:"Africa/Nairobi"});
-    let usaDate=new Date().toLocaleString("en-US",{timeZone:"America/Los_Angeles"});
+let kenyaDate=new Date().toLocaleString("en-US",{timeZone:"Africa/Nairobi"});
+let usaDate=new Date().toLocaleString("en-US",{timeZone:"America/Los_Angeles"});
 
-    let kenyaTime=new Date(kenyaDate);
-    let usaTime=new Date(usaDate);
+let kenyaTime=new Date(kenyaDate);
+let usaTime=new Date(usaDate);
 
-    document.getElementById("kenyaClock").innerText=kenyaTime.toLocaleTimeString();
-    document.getElementById("usaClock").innerText=usaTime.toLocaleTimeString();
+document.getElementById("kenyaClock").innerText=kenyaTime.toLocaleTimeString();
+document.getElementById("usaClock").innerText=usaTime.toLocaleTimeString();
 
-    /* Greeting based on her time */
-    let h=kenyaTime.getHours();
-    let greeting="";
+let h=kenyaTime.getHours();
 
-    if(h>=5 && h<12)
-        greeting="🌅 Good Morning! I hope your day starts beautifully, blessed day ahead.";
-    else if(h>=12 && h<17)
-        greeting="☀️ Good Afternoon! I hope your day is going well.";
-    else if(h>=17 && h<21)
-        greeting="🌇 Good Evening! I hope you're having a nice evening.";
-    else
-        greeting="🌙 Good Night! I hope you sleep peacefully and dream sweetly.";
+let greeting =
+h>=5 && h<12 ? "🌅 Good Morning! Blessed day ahead." :
+h>=12 && h<17 ? "☀️ Good Afternoon!" :
+h>=17 && h<21 ? "🌇 Good Evening!" :
+"🌙 Good Night! Sweet dreams.";
 
-    document.getElementById("greetingMessage").innerText=greeting;
+document.getElementById("greetingMessage").innerText=greeting;
 
-    /* Both awake check */
-    let usaH=usaTime.getHours();
+let usaH=usaTime.getHours();
+let awake=(h>=7 && h<=23 && usaH>=7 && usaH<=23);
 
-    let kenyaAwake=h>=7 && h<=23;
-    let usaAwake=usaH>=7 && usaH<=23;
-
-    if(kenyaAwake && usaAwake){
-        document.getElementById("awakeMessage").innerText =
-        "❤️ Looks like we're both awake.";
-    }
-    else{
-        document.getElementById("awakeMessage").innerText =
-        "💫 Even when our times differ, you're always in my thoughts.";
-    }
+document.getElementById("awakeMessage").innerText=
+awake ? "❤️ Looks like we're both awake." :
+"💫 Even when our times differ, you're always in my thoughts.";
 }
-
 setInterval(updateClocks,1000);
 updateClocks();
+
+/* Mood Verse System */
+function showMoodVerse(mood){
+
+let verse="";
+let message="";
+
+if(mood==="happy"){
+verse=`"This is the day that the Lord has made; let us rejoice and be glad in it."<br>— Psalm 118:24`;
+message="Your happiness makes my heart smile ❤️";
+}
+
+else if(mood==="sad"){
+verse=`"The Lord is near to the brokenhearted."<br>— Psalm 34:18`;
+message="Even on hard days, you are never alone 💕";
+}
+
+else if(mood==="stressed"){
+verse=`"Come to me, all who labor and are heavy laden, and I will give you rest."<br>— Matthew 11:28`;
+message="I wish I could hug you through the screen 🤗";
+}
+
+else if(mood==="loved"){
+verse=`"I have loved you with an everlasting love."<br>— Jeremiah 31:3`;
+message="You deserve all the love in the world 💖";
+}
+
+else if(mood==="tired"){
+verse=`"He gives power to the faint."<br>— Isaiah 40:29`;
+message="Rest well beautiful soul 😌";
+}
+
+document.getElementById("verseDisplay").innerHTML=verse;
+document.getElementById("verseMessage").innerText=message;
+}
+
+/* Music Pulse */
+let music=document.getElementById("music");
+let verseElement=document.getElementById("verseDisplay");
+
+music.addEventListener("play", ()=>{
+verseElement.classList.add("musicPulse");
+});
 
 </script>
 
 </body>
-</html>
+                                            </html>

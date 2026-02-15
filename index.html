@@ -233,6 +233,9 @@ This verse is for you today ❤️
 <button onclick="showMoodVerse('stressed')">😣</button>
 <button onclick="showMoodVerse('loved')">🥰</button>
 <button onclick="showMoodVerse('tired')">😴</button>
+<button onclick="showMoodVerse('lonely')">💔</button>
+<button onclick="showMoodVerse('hopeful')">🤞</button>
+<button onclick="showMoodVerse('anxious')">😟</button>
 </div>
 
 </section>
@@ -365,6 +368,23 @@ else if(mood==="tired"){
 verse=`"He gives power to the faint."<br>— Isaiah 40:29`;
 message="Rest well beautiful soul 😌";
 }
+if(mood==="lonely"){
+verse="I am with you always. — Matthew 28:20";
+message="You are never truly alone ❤️";
+bg="#c77dff";
+}
+
+if(mood==="hopeful"){
+verse="For I know the plans I have for you. — Jeremiah 29:11";
+message="Your future is bright 🌈";
+bg="#06d6a0";
+}
+
+if(mood==="anxious"){
+verse="Do not be anxious about anything. — Philippians 4:6";
+message="Everything will be okay 😌";
+bg="#ffd166";
+}
 
 document.getElementById("verseDisplay").innerHTML=verse;
 document.getElementById("verseMessage").innerText=message;
@@ -382,3 +402,4 @@ verseElement.classList.add("musicPulse");
 
 </body>
 </html>
+
